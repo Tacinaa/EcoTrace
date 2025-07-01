@@ -5,9 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background-color: #FDFDFD; /* Corresponds au background.default du thème MUI */
   min-height: 100vh;
+  line-height: 1.6;
+  color: #36454F; /* Corresponds au text.primary du thème MUI */
 }
+
+/* Import des polices via le <head> de index.html est généralement préférable pour la performance (preload)
+   mais si c'est déjà géré comme ça, on le laisse. Sinon, on pourrait commenter cette ligne
+   et s'assurer que les polices sont chargées via public/index.html */
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@500;600;700&display=swap');
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -19,14 +26,15 @@ code {
   padding-bottom: 2rem;
 }
 
+/* Les styles spécifiques pour MuiSlider et MuiRadio seront gérés par le thème MUI directement
+   ou via les props `sx` pour éviter les `!important` autant que possible.
+   Si des overrides globaux sont nécessaires, ils peuvent être ajoutés ici,
+   mais il est préférable de les gérer via le ThemeProvider. */
+
+/* Exemple de style global si nécessaire, mais à utiliser avec parcimonie */
+/*
 .MuiPaper-root {
-  background-color: #ffffff !important;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
 }
-
-.MuiSlider-root {
-  color: #2E7D32 !important;
-}
-
-.MuiRadio-root {
-  color: #2E7D32 !important;
-}
+*/

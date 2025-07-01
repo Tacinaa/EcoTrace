@@ -154,44 +154,73 @@ const CarbonQuestions: React.FC<Props> = ({ step, onAnswer, answers, showErrors 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.2 }}
         >
-          <Box sx={{ mb: 5, p: 2, borderRadius: 1, '&:hover': { backgroundColor: 'rgba(46, 125, 50, 0.05)'} }}>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: '500', color: 'text.primary', mb: 2.5 }}>
+          {/* Placeholder pour une petite illustration à côté de la question */}
+          {/* <Box sx={{ fontSize: '2rem', textAlign: 'center', mb: 1 }}>{step === 0 ? '👤' : step === 1 ? '🚗' : '🏠'}</Box> */}
+          <Box
+            sx={{
+              mb: 5,
+              p: 2.5, // Un peu plus de padding
+              borderRadius: '12px', // Bords arrondis
+              transition: 'background-color 0.3s ease',
+              '&:hover': {
+                backgroundColor: 'rgba(160, 210, 2DB, 0.1)' // Utilise la couleur primaire avec opacité
+              }
+            }}
+          >
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{
+                fontWeight: '600', // Un peu plus gras
+                color: 'text.primary',
+                mb: 2.5,
+                textAlign: 'center' // Centrer le titre de la question
+              }}
+            >
               {q.question}
             </Typography>
             {q.type === 'radio' ? (
-              <FormControl component="fieldset" required error={showErrors && answers[q.id] === undefined}>
+              <FormControl component="fieldset" required error={showErrors && answers[q.id] === undefined} sx={{ width: '100%'}}>
                 <RadioGroup
                   value={answers[q.id] || ''}
                   onChange={handleRadioChange(q.id)}
+                  sx={{ alignItems: 'center' }} // Centrer les options radio
                 >
                   {q.options?.map((option) => (
                     <FormControlLabel
                       key={option.value}
                       value={option.value}
-                      control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />}
-                      label={<Typography sx={{ fontSize: '1.1rem' }}>{option.label}</Typography>}
+                      control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 26 } }} color="primary"/>}
+                      label={<Typography sx={{ fontSize: '1rem', color: 'text.secondary' }}>{option.label}</Typography>}
                       sx={{
-                        mb: 1,
+                        mb: 0.5,
+                        p: 1,
+                        borderRadius: '8px',
+                        width: 'fit-content', // Ajuster la largeur au contenu
                         '&:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          backgroundColor: 'secondary.main', // Rose pastel léger au survol
                         },
-                        borderRadius: 1,
-                        p: 0.5,
+                        '&.Mui-focused': { // Style quand l'élément est focus (pour accessibilité)
+                          outline: `2px solid #BEE7B8`, // Vert pastel pour l'outline
+                        }
                       }}
                     />
                   ))}
                 </RadioGroup>
                 {showErrors && answers[q.id] === undefined && (
-                  <Typography color="error" variant="body2" sx={{ mt: 1, fontWeight: 'bold' }}>
+                  <Typography color="error" variant="body2" sx={{ mt: 1, fontWeight: '600', textAlign: 'center' }}>
                     Veuillez sélectionner une option
                   </Typography>
                 )}
               </FormControl>
             ) : (
-              <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'center' }}>
-                  <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                    {answers[q.id] || q.defaultValue || 0} {q.unit}
+              <Box sx={{ px: 2 }}> {/* Ajout de padding horizontal pour le slider */}
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5, justifyContent: 'center' }}>
+                  <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
+                    {answers[q.id] || q.defaultValue || 0}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary" sx={{ ml: 1 }}>
+                    {q.unit}
                   </Typography>
                 </Box>
                 <Slider
@@ -202,30 +231,29 @@ const CarbonQuestions: React.FC<Props> = ({ step, onAnswer, answers, showErrors 
                   step={q.step}
                   marks
                   valueLabelDisplay="auto"
+                  color="primary" // Utilise la couleur primaire du thème
                   sx={{
                     mt: 1,
                     '& .MuiSlider-thumb': {
-                      height: 24,
-                      width: 24,
+                      height: 22,
+                      width: 22,
                       backgroundColor: '#fff',
-                      border: '2px solid currentColor',
+                      border: '2px solid currentColor', // currentColor prendra la couleur primaire
                       '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
-                        boxShadow: 'inherit',
-                      },
-                      '&:before': {
-                        display: 'none',
+                        boxShadow: '0 0 0 6px rgba(160, 210, 219, 0.3)', // Ombre de focus avec la couleur primaire
                       },
                     },
                     '& .MuiSlider-track': {
-                      height: 8,
-                      borderRadius: 4,
+                      height: 6,
+                      borderRadius: 3,
                     },
                     '& .MuiSlider-rail': {
-                      height: 8,
-                      borderRadius: 4,
+                      height: 6,
+                      borderRadius: 3,
+                      backgroundColor: 'rgba(160, 210, 219, 0.4)', // Rail plus clair
                     },
                     '& .MuiSlider-markLabel': {
-                      fontSize: '0.9rem',
+                      fontSize: '0.85rem',
                       color: 'text.secondary',
                     }
                   }}

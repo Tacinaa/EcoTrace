@@ -70,26 +70,30 @@ const calculateCarbonFootprint = (answers: Record<string, number>): number => {
 
 const getResultCategory = (carbonFootprint: number): {
   category: string;
-  image: string;
+  image: string; // Gardons image pour l'instant, mais on pourrait le remplacer par un identifiant d'illustration
   message: string;
+  color: string; // Nouvelle propriété pour la couleur associée à la catégorie
 } => {
   if (carbonFootprint <= 6.5) {
     return {
       category: "Excellent",
-      image: "/images/good_result.svg",
-      message: "Bravo ! Vous êtes sur la bonne voie vers l'objectif des 2 tonnes visé pour 2050. Continuez ainsi !"
+      image: "/images/good_result.svg", // Remplacer par une nouvelle illustration pastel
+      message: "Félicitations ! Votre empreinte est faible. Continuez vos efforts écologiques !",
+      color: "#BEE7B8" // Vert pastel frais (success.main)
     };
   } else if (carbonFootprint <= 10) {
     return {
-      category: "Moyen",
-      image: "/images/medium_result.svg",
-      message: "Vous êtes dans la moyenne actuelle, mais encore loin de l'objectif climatique de 2 tonnes. Il y a encore de la marge pour l'améliorer !"
+      category: "Bon Effort", // Changement de nom pour être plus positif
+      image: "/images/medium_result.svg", // Remplacer par une nouvelle illustration pastel
+      message: "C'est un bon début ! Quelques ajustements peuvent encore réduire votre impact.",
+      color: "#A0D2DB" // Bleu pastel doux (primary.main)
     };
   } else {
     return {
-      category: "Mauvaise",
-      image: "/images/bad_result.svg",
-      message: "Vous dépassez la moyenne. Il est urgent d'agir pour réduire votre impact climatique. Suivez nos recommandations pour la réduire !"
+      category: "À Améliorer", // Changement de nom
+      image: "/images/bad_result.svg", // Remplacer par une nouvelle illustration pastel
+      message: "Votre empreinte est un peu élevée. Découvrez nos conseils pour l'alléger.",
+      color: "#FEEAFA" // Rose pastel léger (secondary.main) - ou une couleur plus "alerte" pastel
     };
   }
 };
@@ -120,102 +124,113 @@ const getRecommendations = (answers: Record<string, number>): string[] => {
   return recommendations;
 };
 
+// Placeholder pour les nouvelles images/illustrations pastel
+const resultImages = {
+  Excellent: "🌿", // Idéalement: '/images/pastel_good_result.svg',
+  "Bon Effort": "🌍", // Idéalement: '/images/pastel_medium_result.svg',
+  "À Améliorer": "💡" // Idéalement: '/images/pastel_bad_result.svg',
+};
+
 const Results: React.FC<Props> = ({ answers }) => {
   const carbonFootprint = calculateCarbonFootprint(answers);
-  const { category, image, message } = getResultCategory(carbonFootprint);
+  const { category, message, color } = getResultCategory(carbonFootprint);
+  // Utiliser le placeholder emoji si l'image spécifique n'est pas définie
+  const image = resultImages[category as keyof typeof resultImages] || "❓";
   const recommendations = getRecommendations(answers);
 
   return (
-    <Box>
+    <Box sx={{ py: 2 }}>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <Typography variant="h4" gutterBottom align="center" color="primary">
-          Votre Empreinte Carbone
+        <Typography variant="h3" gutterBottom align="center" sx={{ color: 'text.primary', fontWeight: 'bold', mb: 4 }}>
+          Votre Bilan Carbone Personnel
         </Typography>
         
         <Paper 
-          elevation={3} 
+          elevation={0} // Pas d'ombre pour un look plus plat et moderne
           sx={{ 
-            p: 4, 
-            mb: 3, 
+            p: { xs: 3, sm: 4 },
+            mb: 4,
             textAlign: 'center',
-            maxWidth: '800px',
-            mx: 'auto'
+            maxWidth: '700px', // Un peu plus étroit pour un meilleur focus
+            mx: 'auto',
+            backgroundColor: color, // Utilise la couleur de la catégorie
+            borderRadius: '16px', // Bords arrondis cohérents
+            overflow: 'hidden', // Pour s'assurer que les éléments enfants respectent le border radius
           }}
         >
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 150, damping: 20, delay: 0.2 }}
             style={{
-              margin: '2rem 0',
+              margin: '1rem 0 2rem 0', // Ajustement des marges
               display: 'flex',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
-            <img 
+            {/* Remplacer l'ancienne image par un placeholder texte/emoji pour l'illustration */}
+            <Typography variant="h1" sx={{ fontSize: '6rem' }}>{image}</Typography>
+            {/* <img
               src={image} 
               alt={`Résultat ${category}`}
               style={{ 
-                width: '300px', 
-                height: '300px', 
+                width: '200px', // Taille réduite pour un design plus épuré
+                height: '200px',
                 objectFit: 'contain',
               }} 
-            />
+            /> */}
           </motion.div>
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="h2" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+          <Box sx={{ mt: 1 }}>
+            <Typography variant="h1" sx={{ color: 'common.white', fontWeight: 'bold', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 1 }}>
               {carbonFootprint}
-              <Typography component="span" variant="h4" color="text.secondary">
-                tonnes de CO₂ par an
+              <Typography component="span" variant="h5" sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 'normal' }}>
+                tonnes CO₂/an
               </Typography>
             </Typography>
-            <Typography variant="h5" color="primary" gutterBottom sx={{ mt: 2 }}>
+            <Typography variant="h4" sx={{ color: 'common.white', fontWeight: '600', mt: 1.5 }}>
               {category}
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+            <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.9)', mt: 1.5, px:2, fontSize:'1.1rem' }}>
               {message}
             </Typography>
           </Box>
         </Paper>
 
         {recommendations.length > 0 && (
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              p: 4, 
-              maxWidth: '800px',
-              mx: 'auto'
-            }}
-          >
-            <Typography variant="h5" gutterBottom color="primary">
-              Recommandations personnalisées
+          <Box sx={{ maxWidth: '700px', mx: 'auto', px: {xs: 1, sm: 0} }}>
+            <Typography variant="h4" gutterBottom sx={{ color: 'text.primary', fontWeight: '600', mb: 3, textAlign: 'center' }}>
+               pistes d'amélioration
             </Typography>
             
             {recommendations.map((recommendation, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ delay: index * 0.15 + 0.4, ease: "easeOut", duration: 0.5 }}
               >
                 <Paper 
-                  elevation={2} 
+                  elevation={0}
                   sx={{ 
-                    p: 2, 
+                    p: 2.5,
                     mb: 2,
-                    backgroundColor: 'rgba(46, 125, 50, 0.05)'
+                    backgroundColor: 'background.paper', // Fond papier standard
+                    borderLeft: `5px solid ${color}`, // Bordure colorée rappelant la catégorie
+                    borderRadius: '8px',
+                    boxShadow: '0px 4px 12px rgba(0,0,0,0.04)'
                   }}
                 >
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{ color: 'text.primary', fontSize: '1.05rem' }}>
                     {recommendation}
                   </Typography>
                 </Paper>
               </motion.div>
             ))}
-          </Paper>
+          </Box>
         )}
       </motion.div>
     </Box>
