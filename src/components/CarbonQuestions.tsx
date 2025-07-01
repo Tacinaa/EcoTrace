@@ -154,8 +154,8 @@ const CarbonQuestions: React.FC<Props> = ({ step, onAnswer, answers, showErrors 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.2 }}
         >
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h6" gutterBottom>
+          <Box sx={{ mb: 5, p: 2, borderRadius: 1, '&:hover': { backgroundColor: 'rgba(46, 125, 50, 0.05)'} }}>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: '500', color: 'text.primary', mb: 2.5 }}>
               {q.question}
             </Typography>
             {q.type === 'radio' ? (
@@ -168,22 +168,30 @@ const CarbonQuestions: React.FC<Props> = ({ step, onAnswer, answers, showErrors 
                     <FormControlLabel
                       key={option.value}
                       value={option.value}
-                      control={<Radio />}
-                      label={option.label}
+                      control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />}
+                      label={<Typography sx={{ fontSize: '1.1rem' }}>{option.label}</Typography>}
+                      sx={{
+                        mb: 1,
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                        },
+                        borderRadius: 1,
+                        p: 0.5,
+                      }}
                     />
                   ))}
                 </RadioGroup>
                 {showErrors && answers[q.id] === undefined && (
-                  <Typography color="error" variant="caption" sx={{ mt: 1 }}>
+                  <Typography color="error" variant="body2" sx={{ mt: 1, fontWeight: 'bold' }}>
                     Veuillez sélectionner une option
                   </Typography>
                 )}
               </FormControl>
             ) : (
               <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ minWidth: 100 }}>
-                    Valeur : {answers[q.id] || q.defaultValue || 0}
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'center' }}>
+                  <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
+                    {answers[q.id] || q.defaultValue || 0} {q.unit}
                   </Typography>
                 </Box>
                 <Slider
@@ -193,8 +201,34 @@ const CarbonQuestions: React.FC<Props> = ({ step, onAnswer, answers, showErrors 
                   max={q.max}
                   step={q.step}
                   marks
-                  valueLabelDisplay="on"
-                  sx={{ mt: 2 }}
+                  valueLabelDisplay="auto"
+                  sx={{
+                    mt: 1,
+                    '& .MuiSlider-thumb': {
+                      height: 24,
+                      width: 24,
+                      backgroundColor: '#fff',
+                      border: '2px solid currentColor',
+                      '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+                        boxShadow: 'inherit',
+                      },
+                      '&:before': {
+                        display: 'none',
+                      },
+                    },
+                    '& .MuiSlider-track': {
+                      height: 8,
+                      borderRadius: 4,
+                    },
+                    '& .MuiSlider-rail': {
+                      height: 8,
+                      borderRadius: 4,
+                    },
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.9rem',
+                      color: 'text.secondary',
+                    }
+                  }}
                 />
               </Box>
             )}

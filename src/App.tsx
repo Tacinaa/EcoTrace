@@ -155,17 +155,17 @@ function App() {
               onClick={handleRestart}
             />
           </Box>
-          <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+          <Paper elevation={6} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((label) => (
                 <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontSize: '1.0rem' } }}>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>
           </Paper>
 
-          <Paper elevation={3} sx={{ p: 3 }}>
+          <Paper elevation={6} sx={{ p: 4, borderRadius: 2 }}>
             {activeStep === steps.length ? (
               <Results answers={answers} />
             ) : (
